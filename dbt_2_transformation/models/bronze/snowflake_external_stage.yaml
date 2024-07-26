@@ -1,0 +1,123 @@
+# Defines external sources and their locations within your data warehouse.
+# Reference: https://github.com/dbt-labs/dbt-external-tables/blob/main/sample_sources/snowflake.yml
+
+version: 2
+sources:
+- name: bronze  # This is the name that will be used as reference in the dbt models. It will be created in Snowflake it does not exists.     
+  description: "External tables using Parquet and inferring the schema"
+  database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+  schema: "{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}"  # Specifies the external schema where the sources reside
+  loader: S3
+  tables:
+  - name: customers
+    ext_full_refresh: true
+    description: "External table with customers information"
+    external:   # Here, we will point to the stage (which is assumed to be created in Snowflake) and we will create the External Tables
+      location: "@{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_STAGE') }}/customers" # reference an existing external source (like the customer folder in the bucket that contains that parquet) via the external stage (it appears in the 'Location' parameter in the CUSTOMERS tables in Snowflake)
+      file_format: "{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_FILE_FORMAT') }}"
+      infer_schema: true   # Maps the JSON's 'key:value' pair to the correct columns
+    columns:
+      - name: CustomerID
+        data_type: int
+      - name: Name
+        data_type: varchar(100)
+      - name: Age
+        data_type: int
+      - name: Gender
+        data_type: varchar(10)
+      - name: SignupDate
+        data_type: date
+  - name: dates
+    ext_full_refresh: true
+    description: "External table with dates information"
+    external:
+      location: "@{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_STAGE') }}/dates"  # reference an existing external stage
+      file_format: "{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_FILE_FORMAT') }}"
+      infer_schema: true   # parameter to tell Snowflake we want to infer the table schema
+    columns:
+      - name: DateID
+        data_type: int
+      - name: Date
+        data_type: date
+      - name: Week
+        data_type: int
+      - name: Month
+        data_type: int
+      - name: Quarter
+        data_type: int
+      - name: Year
+        data_type: int
+  - name: product_usage
+    ext_full_refresh: true
+    description: "External table with product usage information"
+    external:
+      location: "@{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_STAGE') }}/product_usage"  # reference an existing external stage
+      file_format: "{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_FILE_FORMAT') }}"
+      infer_schema: true   # parameter to tell Snowflake we want to infer the table schema
+    columns:
+      - name: UsageID
+        data_type: int
+      - name: CustomerID
+        data_type: int
+      - name: DateID
+        data_type: int
+      - name: ProductID
+        data_type: int
+      - name: NumLogins
+        data_type: int
+      - name: Amount
+        data_type: decimal(10, 2)
+  - name: products
+    ext_full_refresh: true
+    description: "External table with products information"
+    external:
+      location: "@{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_STAGE') }}/products"  # reference an existing external stage
+      file_format: "{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_FILE_FORMAT') }}"
+      infer_schema: true   # parameter to tell Snowflake we want to infer the table schema
+    columns:
+      - name: ProductID
+        data_type: int
+      - name: ProductName
+        data_type: varchar(100)
+      - name: Category
+        data_type: varchar(50)
+      - name: Price
+        data_type: decimal(10, 2)
+  - name: subscriptions
+    ext_full_refresh: true
+    description: "External table with subscriptions information"
+    external:
+      location: "@{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_STAGE') }}/subscriptions"  # reference an existing external stage
+      file_format: "{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_FILE_FORMAT') }}"
+      infer_schema: true   # parameter to tell Snowflake we want to infer the table schema
+    columns:
+      - name: SubscriptionID
+        data_type: int
+      - name: CustomerID
+        data_type: int
+      - name: StartDate
+        data_type: date
+      - name: EndDate
+        data_type: date
+      - name: Type
+        data_type: varchar(50)
+      - name: Status
+        data_type: varchar(50)
+  - name: support_interactions
+    ext_full_refresh: true
+    description: "External table with support interactions information"
+    external:
+      location: "@{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_STAGE') }}/support_interactions"  # reference an existing external stage
+      file_format: "{{ env_var('SNOWFLAKE_DATABASE') }}.{{ env_var('SNOWFLAKE_SCHEMA_BRONZE') }}.{{ env_var('S3_SNOWFLAKE_FILE_FORMAT') }}"
+      infer_schema: true   # parameter to tell Snowflake we want to infer the table schema
+    columns:
+      - name: InteractionID
+        data_type: int
+      - name: CustomerID
+        data_type: int
+      - name: DateID
+        data_type: int
+      - name: IssueType
+        data_type: varchar(100)
+      - name: ResolutionTime
+        data_type: int

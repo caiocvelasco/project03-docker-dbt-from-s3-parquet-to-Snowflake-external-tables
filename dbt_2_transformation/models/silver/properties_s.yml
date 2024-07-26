@@ -1,0 +1,138 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Transformed customer data for the silver layer"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        data_tests:
+          - unique
+          - not_null
+      - name: name
+        description: "Name of the customer"
+        data_tests:
+          - not_null
+      - name: age
+        description: "Age of the customer"
+      - name: gender
+        description: "Gender of the customer"
+      - name: signup_date
+        description: "Signup date of the customer"
+        data_tests:
+          - not_null
+      - name: extracted_at
+        description: "Timestamp when the data was extracted"
+      - name: inserted_at
+        description: "Timestamp when the data was inserted into the database"
+
+  - name: dim_dates
+    description: "Date-related information in the silver layer"
+    columns:
+      - name: date_id
+        description: "Unique identifier for each date"
+        data_tests:
+          - unique
+          - not_null
+      - name: date
+        description: "The actual date"
+        data_tests:
+          - not_null
+      - name: week
+        description: "Week of the year"
+      - name: month
+        description: "Month of the year"
+      - name: quarter
+        description: "Quarter of the year"
+      - name: year
+        description: "Year"
+      - name: extracted_at
+        description: "Timestamp when the data was extracted"
+      - name: inserted_at
+        description: "Timestamp when the data was inserted into the database"
+
+  - name: dim_products
+    description: "Product information in the silver layer"
+    columns:
+      - name: product_id
+        description: "Unique identifier for each product"
+        data_tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "Name of the product"
+      - name: category
+        description: "Category of the product"
+      - name: price
+        description: "Price of the product"
+      - name: extracted_at
+        description: "Timestamp when the data was extracted"
+      - name: inserted_at
+        description: "Timestamp when the data was inserted into the database"
+
+  - name: fact_product_usage
+    description: "Aggregated product usage data for the silver layer"
+    columns:
+      - name: usage_id
+        description: "Unique identifier for each usage record"
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Unique identifier for each customer"
+      - name: date_id
+        description: "Reference to the date of usage"
+      - name: product_id
+        description: "Unique identifier for each product"
+      - name: num_logins
+        description: "Number of logins or interactions"
+      - name: amount
+        description: "Amount associated with the product usage"
+      - name: extracted_at
+        description: "Timestamp when the data was extracted"
+      - name: inserted_at
+        description: "Timestamp when the data was inserted into the database"
+
+  - name: fact_subscriptions
+    description: "Subscription information for the silver layer"
+    columns:
+      - name: subscription_id
+        description: "Unique identifier for each subscription"
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Unique identifier for each customer"
+      - name: start_date
+        description: "Start date of the subscription"
+      - name: end_date
+        description: "End date of the subscription"
+      - name: type
+        description: "Type of the subscription"
+      - name: status
+        description: "Status of the subscription"
+      - name: extracted_at
+        description: "Timestamp when the data was extracted"
+      - name: inserted_at
+        description: "Timestamp when the data was inserted into the database"
+
+  - name: fact_support_interactions
+    description: "Support interaction data for the silver layer"
+    columns:
+      - name: interaction_id
+        description: "Unique identifier for each interaction"
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Unique identifier for each customer"
+      - name: date_id
+        description: "Reference to the date of the interaction"
+      - name: issue_type
+        description: "Type of the issue reported"
+      - name: resolution_time
+        description: "Time taken to resolve the issue"
+      - name: extracted_at
+        description: "Timestamp when the data was extracted"
+      - name: inserted_at
+        description: "Timestamp when the data was inserted into the database"

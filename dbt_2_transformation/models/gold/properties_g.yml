@@ -1,0 +1,102 @@
+version: 2
+
+models:
+  - name: churn_customers
+    description: "Identifies churned customers"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        data_tests:
+          - unique
+          - not_null
+      - name: name
+        description: "Name of the customer"
+      - name: age
+        description: "Age of the customer"
+      - name: gender
+        description: "Gender of the customer"
+      - name: signup_date
+        description: "Signup date of the customer"
+      - name: subscription_id
+        description: "Unique identifier for each subscription"
+      - name: subscription_type
+        description: "Type of the subscription"
+      - name: start_date
+        description: "Start date of the subscription"
+      - name: end_date
+        description: "End date of the subscription"
+      - name: is_churned
+        description: "Indicates whether the customer has churned (1 for churned, 0 for not churned)"
+        data_tests:
+          - not_null
+
+  - name: product_usage_features
+    description: "Aggregated product usage data for each customer"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        data_tests:
+          - unique
+          - not_null
+      - name: total_logins
+        description: "Total number of logins by the customer"
+      - name: total_days
+        description: "Total number of days the customer has logged in"
+      - name: avg_logins_per_day
+        description: "Average number of logins per day by the customer"
+      - name: total_spent
+        description: "Total amount spent by the customer"
+      - name: usage_days_span
+        description: "Span of days the customer has used the product"
+
+  - name: support_interaction_features
+    description: "Aggregated support interaction data for each customer"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        data_tests:
+          - unique
+          - not_null
+      - name: total_support_interactions
+        description: "Total number of support interactions by the customer"
+      - name: avg_resolution_time
+        description: "Average time taken to resolve support issues for the customer"
+
+  - name: churn_features
+    description: "Combines all aggregated features into a single table for churn analysis"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        data_tests:
+          - unique
+          - not_null
+      - name: name
+        description: "Name of the customer"
+      - name: age
+        description: "Age of the customer"
+      - name: gender
+        description: "Gender of the customer"
+      - name: signup_date
+        description: "Signup date of the customer"
+      - name: subscription_type
+        description: "Type of the subscription"
+      - name: start_date
+        description: "Start date of the subscription"
+      - name: end_date
+        description: "End date of the subscription"
+      - name: is_churned
+        description: "Indicates whether the customer has churned (1 for churned, 0 for not churned)"
+        data_tests:
+          - not_null
+      - name: total_logins
+        description: "Total number of logins by the customer"
+      - name: avg_logins_per_day
+        description: "Average number of logins per day by the customer"
+      - name: total_spent
+        description: "Total amount spent by the customer"
+      - name: usage_days_span
+        description: "Span of days the customer has used the product"
+      - name: total_support_interactions
+        description: "Total number of support interactions by the customer"
+      - name: avg_resolution_time
+        description: "Average time taken to resolve support issues for the customer"
